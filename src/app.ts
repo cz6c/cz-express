@@ -2,13 +2,13 @@ import express from "express";
 import path from "path";
 import cors from "cors";
 import routes from "./routes/index";
-import db from "./config/db";
+import db from "./db";
 import UserModel from "./models/users";
 import MapFootprintModel from "./models/mapFootprints";
 import MemorialDayModel from "./models/memorialDays";
 
 const app = express();
-const port = 3000;
+const port = 9999;
 
 // 配置静态资源
 app.use(express.static(path.join(__dirname, "./public")));

@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import db from "../config/db";
+import db from "../db";
 
 // Define schema
 const MemorialDayModel = db.define(
