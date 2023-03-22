@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 
 const db = new Sequelize("we", "we", "123456", {
-  host: "127.0.0.1", //数据库地址,默认本机
+  host: "35.76.99.97", //数据库地址,默认本机
   port: 3306, //端口，默认3306
   dialect: "mysql", //数据库类型
   pool: {

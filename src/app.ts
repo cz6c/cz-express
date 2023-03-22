@@ -40,6 +40,25 @@ db.authenticate()
     console.error("Unable to connect to the database:", err);
   });
 
-app.listen(port, () => {
-  console.log(`Timezones by location application is running on port ${port}.`);
+const http = require("http");
+const https = require("https");
+const fs = require("fs");
+const options = {
+  key: fs.readFileSync(path.join(__dirname, "../9534144_www.cz6hy9.top.key")),
+  cert: fs.readFileSync(path.join(__dirname, "../9534144_www.cz6hy9.top.pem")),
+};
+// 创建服务
+const httpsServer = https.createServer(options, app);
+const httpServer = http.createServer(app);
+
+httpsServer.listen(9999, () => {
+  console.log("Example app listening on port 9999!");
 });
+
+httpServer.listen(9998, () => {
+  console.log("Example app listening on port 9998!");
+});
+
+// app.listen(port, () => {
+//   console.log(`Timezones by location application is running on port ${port}.`);
+// });
