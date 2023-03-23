@@ -6,9 +6,11 @@ import db from "./db";
 import UserModel from "./models/users";
 import MapFootprintModel from "./models/mapFootprints";
 import MemorialDayModel from "./models/memorialDays";
+import http from "http";
+import https from "https";
+import fs from "fs";
 
 const app = express();
-const port = 9999;
 
 // 配置静态资源
 app.use(express.static(path.join(__dirname, "./public")));
@@ -40,9 +42,7 @@ db.authenticate()
     console.error("Unable to connect to the database:", err);
   });
 
-const http = require("http");
-const https = require("https");
-const fs = require("fs");
+
 const options = {
   key: fs.readFileSync(path.join(__dirname, "../9534144_www.cz6hy9.top.key")),
   cert: fs.readFileSync(path.join(__dirname, "../9534144_www.cz6hy9.top.pem")),
@@ -51,14 +51,10 @@ const options = {
 const httpsServer = https.createServer(options, app);
 const httpServer = http.createServer(app);
 
-httpsServer.listen(9999, () => {
-  console.log("Example app listening on port 9999!");
+httpsServer.listen(443, () => {
+  console.log("Example app listening on port 443!");
 });
 
-httpServer.listen(9998, () => {
-  console.log("Example app listening on port 9998!");
+httpServer.listen(3000, () => {
+  console.log("Example app listening on port 3000!");
 });
-
-// app.listen(port, () => {
-//   console.log(`Timezones by location application is running on port ${port}.`);
-// });
