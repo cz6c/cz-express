@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { CODE_SUCCESS } from "../utils/constant";
+import { resultSuccess, resultPageSuccess } from "../utils/result";
 import MapFootprintModel from "../models/mapFootprints";
 import { Op } from "sequelize";
 
@@ -14,11 +14,7 @@ export default class MapFootprintController {
       if (!item[0]) {
         next(new Error("不存在"));
       } else {
-        res.json({
-          code: CODE_SUCCESS,
-          msg: "success",
-          data: item[0],
-        });
+        res.json(resultSuccess(item[0]));
       }
     } catch (err) {
       console.log(err);
@@ -27,16 +23,6 @@ export default class MapFootprintController {
   }
 
   public static async list(req: Request, res: Response, next: NextFunction) {
-    // 分页参数处理
-    const limit = Number(req.query.limit);
-    const page = Number(req.query.page);
-    let pageInfo = {};
-    if (limit && page) {
-      pageInfo = {
-        limit,
-        offset: (page - 1) * limit,
-      };
-    }
     // 查询参数处理
     let params: any = { status: 1 };
     const content = req.query.content;
@@ -46,21 +32,18 @@ export default class MapFootprintController {
       };
     }
     try {
-      const count = await MapFootprintModel.count({ where: params });
+      const total = await MapFootprintModel.count({ where: params });
       const list = await MapFootprintModel.findAll({
         where: params,
-        ...pageInfo,
       });
-      res.json({
-        code: CODE_SUCCESS,
-        msg: "success",
-        data: {
-          list,
-          limit,
-          page,
-          count,
-        },
-      });
+      // 分页参数处理
+      const limit = Number(req.query.limit);
+      const page = Number(req.query.page);
+      if (limit && page) {
+        res.json(resultPageSuccess({ list, page, limit, total }));
+      } else {
+        res.json(resultSuccess({ list, total }));
+      }
     } catch (err) {
       console.log(err);
       next(new Error(err));
@@ -70,10 +53,7 @@ export default class MapFootprintController {
   public static async create(req: Request, res: Response, next: NextFunction) {
     try {
       await MapFootprintModel.create(req.body);
-      res.json({
-        code: CODE_SUCCESS,
-        msg: "success",
-      });
+      res.json(resultSuccess(null));
     } catch (err) {
       console.log(err);
       next(new Error(err));
@@ -87,10 +67,7 @@ export default class MapFootprintController {
           id: req.body.id,
         },
       });
-      res.json({
-        code: CODE_SUCCESS,
-        msg: "success",
-      });
+      res.json(resultSuccess(null));
     } catch (err) {
       console.log(err);
       next(new Error(err));
@@ -107,10 +84,7 @@ export default class MapFootprintController {
           },
         }
       );
-      res.json({
-        code: CODE_SUCCESS,
-        msg: "success",
-      });
+      res.json(resultSuccess(null));
     } catch (err) {
       console.log(err);
       next(new Error(err));

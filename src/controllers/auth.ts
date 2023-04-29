@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import UserModel from "../models/users";
-import { PRIVATE_KEY, JWT_EXPIRED, CODE_SUCCESS } from "../utils/constant";
+import { ConstantEnum } from "../utils/constant";
+import { resultSuccess } from "../utils/result";
 
 export default class AuthController {
   /**
@@ -26,13 +27,14 @@ export default class AuthController {
     if (!item[0]) {
       next(new Error("用户不存在"));
     } else if (item[0].password === password) {
-      res.json({
-        code: CODE_SUCCESS,
-        msg: "登录成功",
-        data: jwt.sign({ id: item[0].id }, PRIVATE_KEY, {
-          expiresIn: JWT_EXPIRED,
-        }),
-      });
+      res.json(
+        resultSuccess(
+          jwt.sign({ id: item[0].id }, ConstantEnum.JWT_PRIVATE_KEY, {
+            expiresIn: ConstantEnum.JWT_EXPIRED,
+          }),
+          {}
+        )
+      );
     } else {
       next(new Error("密码错误"));
     }

@@ -1,12 +1,17 @@
 import { Request, Response, NextFunction } from "express";
-import { CODE_SUCCESS } from "../utils/constant";
-import { decode } from "../utils/auth_jwt";
+import {
+  getToken,
+  encode,
+  resultSuccess,
+  resultPageSuccess,
+} from "../utils/result";
 import UserModel from "../models/users";
 import { Op } from "sequelize";
 
 export default class userController {
   public static async info(req: Request, res: Response, next: NextFunction) {
-    const jwtPayload: any = decode(req);
+    const token = getToken(req);
+    const jwtPayload = encode(token);
     try {
       const item = await UserModel.findAll({
         attributes: { exclude: ["password"] }, //过滤掉password字段
@@ -17,11 +22,7 @@ export default class userController {
       if (!item[0]) {
         next(new Error("用户不存在"));
       } else {
-        res.json({
-          code: CODE_SUCCESS,
-          msg: "success",
-          data: item[0],
-        });
+        res.json(resultSuccess(item[0]));
       }
     } catch (err) {
       console.log(err);
@@ -30,16 +31,6 @@ export default class userController {
   }
 
   public static async list(req: Request, res: Response, next: NextFunction) {
-    // 分页参数处理
-    const limit = Number(req.query.limit);
-    const page = Number(req.query.page);
-    let pageInfo = {};
-    if (limit && page) {
-      pageInfo = {
-        limit,
-        offset: (page - 1) * limit,
-      };
-    }
     // 查询参数处理
     let params: any = { status: 1 };
     const username = req.query.username;
@@ -49,22 +40,19 @@ export default class userController {
       };
     }
     try {
-      const count = await UserModel.count({ where: params });
+      const total = await UserModel.count({ where: params });
       const list = await UserModel.findAll({
         attributes: { exclude: ["password"] }, //过滤掉password字段
         where: params,
-        ...pageInfo,
       });
-      res.json({
-        code: CODE_SUCCESS,
-        msg: "success",
-        data: {
-          list,
-          limit,
-          page,
-          count,
-        },
-      });
+      // 分页参数处理
+      const limit = Number(req.query.limit);
+      const page = Number(req.query.page);
+      if (limit && page) {
+        res.json(resultPageSuccess({ list, page, limit, total }));
+      } else {
+        res.json(resultSuccess({ list, total }));
+      }
     } catch (err) {
       console.log(err);
       next(new Error(err));
@@ -74,10 +62,7 @@ export default class userController {
   public static async create(req: Request, res: Response, next: NextFunction) {
     try {
       await UserModel.create(req.body);
-      res.json({
-        code: CODE_SUCCESS,
-        msg: "success",
-      });
+      res.json(resultSuccess(null));
     } catch (err) {
       console.log(err);
       next(new Error(err));
@@ -91,10 +76,7 @@ export default class userController {
           id: req.body.id,
         },
       });
-      res.json({
-        code: CODE_SUCCESS,
-        msg: "success",
-      });
+      res.json(resultSuccess(null));
     } catch (err) {
       console.log(err);
       next(new Error(err));
@@ -111,10 +93,7 @@ export default class userController {
           },
         }
       );
-      res.json({
-        code: CODE_SUCCESS,
-        msg: "success",
-      });
+      res.json(resultSuccess(null));
     } catch (err) {
       console.log(err);
       next(new Error(err));

@@ -3,12 +3,10 @@ import path from "path";
 import cors from "cors";
 import routes from "./routes/index";
 import db from "./db";
+import config from "./config";
 import UserModel from "./models/users";
 import MapFootprintModel from "./models/mapFootprints";
 import MemorialDayModel from "./models/memorialDays";
-import http from "http";
-import https from "https";
-import fs from "fs";
 
 const app = express();
 
@@ -34,7 +32,7 @@ db.authenticate()
     UserModel.hasMany(MapFootprintModel);
     MapFootprintModel.belongsTo(UserModel);
     await db.sync({
-      // force: true
+      // force: true,
     });
     console.log("force: true 强制同步");
   })
@@ -42,19 +40,8 @@ db.authenticate()
     console.error("Unable to connect to the database:", err);
   });
 
-
-const options = {
-  key: fs.readFileSync(path.join(__dirname, "../9534144_www.cz6hy9.top.key")),
-  cert: fs.readFileSync(path.join(__dirname, "../9534144_www.cz6hy9.top.pem")),
-};
-// 创建服务
-const httpsServer = https.createServer(options, app);
-const httpServer = http.createServer(app);
-
-httpsServer.listen(443, () => {
-  console.log("Example app listening on port 443!");
-});
-
-httpServer.listen(3000, () => {
-  console.log("Example app listening on port 3000!");
+app.listen(config.port, () => {
+  console.log(
+    `Timezones by location application is running on port ${config.port}.`
+  );
 });

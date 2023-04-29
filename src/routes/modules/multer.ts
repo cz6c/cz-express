@@ -3,7 +3,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import moment from "moment";
-import { CODE_SUCCESS } from "../../utils/constant";
+import { resultSuccess } from "../../utils/result";
 
 const router = express.Router();
 
@@ -35,11 +35,7 @@ router.post(
   "/upload",
   upload.single("file"),
   (req: Request, res: Response, next: NextFunction) => {
-    res.json({
-      code: CODE_SUCCESS,
-      msg: "success",
-      data: `/upload/${year}/${req.file.filename}`,
-    });
+    res.json(resultSuccess(`/upload/${year}/${req.file.filename}`));
     // req.file 是 `file` 文件的信息
     // req.body 将具有文本域数据，如果存在的话
   }
