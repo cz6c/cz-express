@@ -5,7 +5,9 @@
   "main": "src/app.ts",
   "scripts": {
     "start:dev": "set NODE_ENV=development&& nodemon ./src/app.ts",
-    "start:prod": "set NODE_ENV=production&& node ./src/app.ts"
+    "start:prod": "set NODE_ENV=production&& node ./src/app.ts",
+    "pm2:dev": "pm2 start ecosystem.config.js --env development",
+    "pm2:prod": "pm2 start ecosystem.config.js --env production"
   },
   "author": "",
   "license": "ISC",

@@ -100,7 +100,7 @@ export function getToken(req: Request): string | undefined {
  */
 export function encode(token: string | undefined): jsonwebtoken.JwtPayload {
   return jsonwebtoken.verify(
-    token,
+    token as string,
     ConstantEnum.JWT_PRIVATE_KEY
   ) as jsonwebtoken.JwtPayload;
 }

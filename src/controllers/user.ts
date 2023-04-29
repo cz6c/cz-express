@@ -24,7 +24,7 @@ export default class userController {
       } else {
         res.json(resultSuccess(item[0]));
       }
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
       next(new Error(err));
     }
@@ -53,7 +53,7 @@ export default class userController {
       } else {
         res.json(resultSuccess({ list, total }));
       }
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
       next(new Error(err));
     }
@@ -63,7 +63,7 @@ export default class userController {
     try {
       await UserModel.create(req.body);
       res.json(resultSuccess(null));
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
       next(new Error(err));
     }
@@ -77,7 +77,7 @@ export default class userController {
         },
       });
       res.json(resultSuccess(null));
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
       next(new Error(err));
     }
@@ -94,7 +94,7 @@ export default class userController {
         }
       );
       res.json(resultSuccess(null));
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
       next(new Error(err));
     }

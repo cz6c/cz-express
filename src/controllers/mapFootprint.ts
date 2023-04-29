@@ -16,7 +16,7 @@ export default class MapFootprintController {
       } else {
         res.json(resultSuccess(item[0]));
       }
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
       next(new Error(err));
     }
@@ -44,7 +44,7 @@ export default class MapFootprintController {
       } else {
         res.json(resultSuccess({ list, total }));
       }
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
       next(new Error(err));
     }
@@ -54,7 +54,7 @@ export default class MapFootprintController {
     try {
       await MapFootprintModel.create(req.body);
       res.json(resultSuccess(null));
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
       next(new Error(err));
     }
@@ -68,7 +68,7 @@ export default class MapFootprintController {
         },
       });
       res.json(resultSuccess(null));
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
       next(new Error(err));
     }
@@ -85,7 +85,7 @@ export default class MapFootprintController {
         }
       );
       res.json(resultSuccess(null));
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
       next(new Error(err));
     }

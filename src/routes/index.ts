@@ -31,18 +31,20 @@ router.use("/", memorialDayRouter);
 router.use("/", mapFootprintRouter);
 
 // 自定义统一异常处理中间件
-router.use((err: { name: string; message: any }, req: any, res, next: any) => {
-  console.log("err===", err);
-  const code: number =
-    err.name === "UnauthorizedError"
-      ? ConstantEnum.CODE_TOKEN_EXPIRED
-      : ConstantEnum.CODE_ERROR;
-  res.json(
-    resultError(null, {
-      code,
-      message: err.message,
-    })
-  );
-});
+router.use(
+  (err: { name: string; message: any }, req: any, res: any, next: any) => {
+    console.log("err===", err);
+    const code: number =
+      err.name === "UnauthorizedError"
+        ? ConstantEnum.CODE_TOKEN_EXPIRED
+        : ConstantEnum.CODE_ERROR;
+    res.json(
+      resultError(null, {
+        code,
+        message: err.message,
+      })
+    );
+  }
+);
 
 export default router;
