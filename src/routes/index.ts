@@ -21,14 +21,14 @@ router.use(
     getToken: getToken,
   }).unless({
     // 设置jwt认证白名单，比如/api/login登录接口不需要拦截
-    path: ["/login"],
+    path: ["/admin/login"],
   })
 );
-router.use("/", authRouter);
-router.use("/", userRouter);
-router.use("/", multerRouter);
-router.use("/", memorialDayRouter);
-router.use("/", mapFootprintRouter);
+router.use("/admin", authRouter);
+router.use("/admin", userRouter);
+router.use("/admin", multerRouter);
+router.use("/admin", memorialDayRouter);
+router.use("/admin", mapFootprintRouter);
 
 // 自定义统一异常处理中间件
 router.use(
