@@ -32,8 +32,8 @@ export default class AuthController {
           jwt.sign({ id: item[0].id }, ConstantEnum.JWT_PRIVATE_KEY, {
             expiresIn: ConstantEnum.JWT_EXPIRED,
           }),
-          {}
-        )
+          {},
+        ),
       );
     } else {
       next(new Error("密码错误"));

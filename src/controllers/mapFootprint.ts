@@ -82,7 +82,7 @@ export default class MapFootprintController {
           where: {
             id: req.body.id,
           },
-        }
+        },
       );
       res.json(resultSuccess(null));
     } catch (err: any) {

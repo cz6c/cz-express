@@ -1,10 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import {
-  getToken,
-  encode,
-  resultSuccess,
-  resultPageSuccess,
-} from "../utils/result";
+import { getToken, encode, resultSuccess, resultPageSuccess } from "../utils/result";
 import UserModel from "../models/users";
 import { Op } from "sequelize";
 
@@ -91,7 +86,7 @@ export default class userController {
           where: {
             id: req.body.id,
           },
-        }
+        },
       );
       res.json(resultSuccess(null));
     } catch (err: any) {

@@ -36,12 +36,10 @@ db.authenticate()
     });
     console.log("force: true 强制同步");
   })
-  .catch((err) => {
+  .catch(err => {
     console.error("Unable to connect to the database:", err);
   });
 
 app.listen(config.port, () => {
-  console.log(
-    `Timezones by location application is running on port ${config.port}.`
-  );
+  console.log(`Timezones by location application is running on port ${config.port}.`);
 });

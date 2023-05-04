@@ -34,7 +34,7 @@ const UserModel = db.define(
     timestamps: false, // 不要默认时间戳
     // Freeze Table Name
     freezeTableName: true,
-  }
+  },
 );
 
 // Export model Product

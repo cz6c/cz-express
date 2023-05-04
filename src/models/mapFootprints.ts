@@ -37,7 +37,7 @@ const MapFootprintModel = db.define(
     timestamps: false, // 不要默认时间戳
     // Freeze Table Name 禁用修改表名; 默认情况下，sequelize将自动将所有传递的模型名称（define的第一个参数）转换为复数
     freezeTableName: true,
-  }
+  },
 );
 
 // Export model Product

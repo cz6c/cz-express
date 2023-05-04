@@ -14,10 +14,7 @@ interface RequestInfo<T> {
  */
 export function resultSuccess<T>(
   data: T,
-  {
-    code = ConstantEnum.CODE_SUCCESS as number,
-    message = "Request Success",
-  } = {}
+  { code = ConstantEnum.CODE_SUCCESS as number, message = "Request Success" } = {},
 ): RequestInfo<T> {
   return {
     data,
@@ -32,7 +29,7 @@ export function resultSuccess<T>(
  */
 export function resultError(
   data = null,
-  { code = ConstantEnum.CODE_ERROR as Number, message = "Request Error" } = {}
+  { code = ConstantEnum.CODE_ERROR as Number, message = "Request Error" } = {},
 ): RequestInfo<unknown> {
   return {
     data,
@@ -49,16 +46,8 @@ export function resultError(
  * @return {*}
  */
 export function resultPageSuccess<T>(
-  {
-    list,
-    page,
-    limit,
-    total,
-  }: { list: T[]; page: number; limit: number; total: number },
-  {
-    code = ConstantEnum.CODE_SUCCESS as number,
-    message = "Request Success",
-  } = {}
+  { list, page, limit, total }: { list: T[]; page: number; limit: number; total: number },
+  { code = ConstantEnum.CODE_SUCCESS as number, message = "Request Success" } = {},
 ): RequestInfo<unknown> {
   const offset = (page - 1) * Number(limit);
   const pageData =
@@ -73,7 +62,7 @@ export function resultPageSuccess<T>(
         limit,
         total,
       },
-      { code, message }
+      { code, message },
     ),
   };
 }
@@ -99,8 +88,5 @@ export function getToken(req: Request): string | undefined {
  * @return {*}
  */
 export function encode(token: string | undefined): jsonwebtoken.JwtPayload {
-  return jsonwebtoken.verify(
-    token as string,
-    ConstantEnum.JWT_PRIVATE_KEY
-  ) as jsonwebtoken.JwtPayload;
+  return jsonwebtoken.verify(token as string, ConstantEnum.JWT_PRIVATE_KEY) as jsonwebtoken.JwtPayload;
 }

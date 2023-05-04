@@ -31,14 +31,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.post(
-  "/upload",
-  upload.single("file"),
-  (req: Request, res: Response, next: NextFunction) => {
-    res.json(resultSuccess(`/upload/${year}/${req.file.filename}`));
-    // req.file 是 `file` 文件的信息
-    // req.body 将具有文本域数据，如果存在的话
-  }
-);
+router.post("/upload", upload.single("file"), (req: Request, res: Response, next: NextFunction) => {
+  res.json(resultSuccess(`/upload/${year}/${req.file.filename}`));
+  // req.file 是 `file` 文件的信息
+  // req.body 将具有文本域数据，如果存在的话
+});
 
 export default router;
