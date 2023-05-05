@@ -4,9 +4,6 @@ import cors from "cors";
 import routes from "./routes/index";
 import db from "./db";
 import config from "./config";
-import UserModel from "./models/users";
-import MapFootprintModel from "./models/mapFootprints";
-import MemorialDayModel from "./models/memorialDays";
 
 const app = express();
 
@@ -24,20 +21,20 @@ app.use(routes);
 
 // 数据库连接成功处理
 db.authenticate()
-  .then(async () => {
-    console.log("Connection has been established successfully.");
-    // 用户表一对多关联操作
-    UserModel.hasMany(MemorialDayModel);
-    MemorialDayModel.belongsTo(UserModel);
-    UserModel.hasMany(MapFootprintModel);
-    MapFootprintModel.belongsTo(UserModel);
-    await db.sync({
-      // force: true,
-    });
-    console.log("force: true 强制同步");
+  .then(() => {
+    // const isForce = false;
+    // db.sync({
+    //   force: isForce,
+    // })
+    //   .then(() => {
+    //     console.log(isForce ? "强制同步-先删表再重新建表" : "同步-尚未在数据库中的模型");
+    //   })
+    //   .catch(err => {
+    //     console.error("同步失败", err);
+    //   });
   })
   .catch(err => {
-    console.error("Unable to connect to the database:", err);
+    console.error("连接失败", err);
   });
 
 app.listen(config.port, () => {

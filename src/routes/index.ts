@@ -2,11 +2,11 @@ import express from "express";
 import { expressjwt } from "express-jwt";
 import { ConstantEnum } from "../utils/constant";
 import { getToken, resultError } from "../utils/result";
+import multerRouter from "./modules/multer";
 import authRouter from "./modules/auth";
 import userRouter from "./modules/user";
-import multerRouter from "./modules/multer";
-import memorialDayRouter from "./modules/memorialDay";
-import mapFootprintRouter from "./modules/mapFootprint";
+import deptRouter from "./modules/dept";
+import roleRouter from "./modules/role";
 
 const router = express.Router();
 
@@ -27,8 +27,8 @@ router.use(
 router.use("/admin", authRouter);
 router.use("/admin", userRouter);
 router.use("/admin", multerRouter);
-router.use("/admin", memorialDayRouter);
-router.use("/admin", mapFootprintRouter);
+router.use("/admin", deptRouter);
+router.use("/admin", roleRouter);
 
 // 自定义统一异常处理中间件
 router.use((err: { name: string; message: any }, req: any, res: any, next: any) => {

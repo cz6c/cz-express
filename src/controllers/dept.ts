@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { resultSuccess, resultPageSuccess } from "../utils/result";
-import MapFootprintModel from "../models/mapFootprints";
+import DeptModel from "../models/dept";
 import { Op } from "sequelize";
 
-export default class MapFootprintController {
+export default class DeptController {
   public static async info(req: Request, res: Response, next: NextFunction) {
     try {
-      const item = await MapFootprintModel.findAll({
+      const item = await DeptModel.findAll({
         where: {
           id: req.query.id,
         },
@@ -25,15 +25,15 @@ export default class MapFootprintController {
   public static async list(req: Request, res: Response, next: NextFunction) {
     // 查询参数处理
     let params: any = { status: 1 };
-    const content = req.query.content;
-    if (content) {
-      params.content = {
-        [Op.like]: `%${content}%`,
+    const keyword = req.query.keyword;
+    if (keyword) {
+      params.deptName = {
+        [Op.like]: `%${keyword}%`,
       };
     }
     try {
-      const total = await MapFootprintModel.count({ where: params });
-      const list = await MapFootprintModel.findAll({
+      const total = await DeptModel.count({ where: params });
+      const list = await DeptModel.findAll({
         where: params,
       });
       // 分页参数处理
@@ -52,7 +52,7 @@ export default class MapFootprintController {
 
   public static async create(req: Request, res: Response, next: NextFunction) {
     try {
-      await MapFootprintModel.create(req.body);
+      await DeptModel.create(req.body);
       res.json(resultSuccess(null));
     } catch (err: any) {
       console.log(err);
@@ -62,7 +62,7 @@ export default class MapFootprintController {
 
   public static async update(req: Request, res: Response, next: NextFunction) {
     try {
-      await MapFootprintModel.update(req.body, {
+      await DeptModel.update(req.body, {
         where: {
           id: req.body.id,
         },
@@ -76,7 +76,7 @@ export default class MapFootprintController {
 
   public static async destroy(req: Request, res: Response, next: NextFunction) {
     try {
-      await MapFootprintModel.update(
+      await DeptModel.update(
         { status: 2 },
         {
           where: {

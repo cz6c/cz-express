@@ -2,31 +2,34 @@ import { DataTypes } from "sequelize";
 import db from "../db";
 
 // Define schema
-const MemorialDayModel = db.define(
-  "memorial_days",
+const RoleModel = db.define(
+  "role",
   {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true, //整数自增
       primaryKey: true, //主键
     },
-    title: {
-      type: DataTypes.STRING,
+    roleName: {
+      type: DataTypes.STRING(20),
+      comment: "角色名称",
     },
-    eventTime: {
+    remark: {
+      type: DataTypes.STRING(50),
+      comment: "备注",
+    },
+    menuIds: {
       type: DataTypes.STRING,
+      comment: "菜单id数组",
     },
     status: {
       type: DataTypes.INTEGER,
       defaultValue: 1,
+      comment: "开启状态",
     },
   },
-  {
-    timestamps: false, // 不要默认时间戳
-    // Freeze Table Name
-    freezeTableName: true,
-  },
+  {},
 );
 
 // Export model Product
-export default MemorialDayModel;
+export default RoleModel;

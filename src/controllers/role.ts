@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { resultSuccess, resultPageSuccess } from "../utils/result";
-import MemorialDayModel from "../models/memorialDays";
+import RoleModel from "../models/role";
 import { Op } from "sequelize";
 
-export default class MemorialDayController {
+export default class RoleController {
   public static async info(req: Request, res: Response, next: NextFunction) {
     try {
-      const item = await MemorialDayModel.findAll({
+      const item = await RoleModel.findAll({
         where: {
           id: req.query.id,
         },
@@ -25,15 +25,15 @@ export default class MemorialDayController {
   public static async list(req: Request, res: Response, next: NextFunction) {
     // 查询参数处理
     let params: any = { status: 1 };
-    const content = req.query.content;
-    if (content) {
-      params.content = {
-        [Op.like]: `%${content}%`,
+    const keyword = req.query.keyword;
+    if (keyword) {
+      params.roleName = {
+        [Op.like]: `%${keyword}%`,
       };
     }
     try {
-      const total = await MemorialDayModel.count({ where: params });
-      const list = await MemorialDayModel.findAll({
+      const total = await RoleModel.count({ where: params });
+      const list = await RoleModel.findAll({
         where: params,
       });
       // 分页参数处理
@@ -52,7 +52,7 @@ export default class MemorialDayController {
 
   public static async create(req: Request, res: Response, next: NextFunction) {
     try {
-      await MemorialDayModel.create(req.body);
+      await RoleModel.create(req.body);
       res.json(resultSuccess(null));
     } catch (err: any) {
       console.log(err);
@@ -62,7 +62,7 @@ export default class MemorialDayController {
 
   public static async update(req: Request, res: Response, next: NextFunction) {
     try {
-      await MemorialDayModel.update(req.body, {
+      await RoleModel.update(req.body, {
         where: {
           id: req.body.id,
         },
@@ -76,7 +76,7 @@ export default class MemorialDayController {
 
   public static async destroy(req: Request, res: Response, next: NextFunction) {
     try {
-      await MemorialDayModel.update(
+      await RoleModel.update(
         { status: 2 },
         {
           where: {

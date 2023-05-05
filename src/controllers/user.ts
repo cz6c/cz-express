@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { getToken, encode, resultSuccess, resultPageSuccess } from "../utils/result";
-import UserModel from "../models/users";
+import UserModel from "../models/user";
 import { Op } from "sequelize";
+import { validationResult } from "express-validator";
 
 export default class userController {
   public static async info(req: Request, res: Response, next: NextFunction) {
@@ -56,6 +57,10 @@ export default class userController {
 
   public static async create(req: Request, res: Response, next: NextFunction) {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        next(new Error(errors.array()[0]?.msg));
+      }
       await UserModel.create(req.body);
       res.json(resultSuccess(null));
     } catch (err: any) {
@@ -66,6 +71,10 @@ export default class userController {
 
   public static async update(req: Request, res: Response, next: NextFunction) {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        next(new Error(errors.array()[0]?.msg));
+      }
       await UserModel.update(req.body, {
         where: {
           id: req.body.id,
@@ -80,6 +89,10 @@ export default class userController {
 
   public static async destroy(req: Request, res: Response, next: NextFunction) {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        next(new Error(errors.array()[0]?.msg));
+      }
       await UserModel.update(
         { status: 2 },
         {

@@ -3,38 +3,40 @@ import db from "../db";
 
 // Define schema
 const UserModel = db.define(
-  "users",
+  "user",
   {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true, //整数自增
       primaryKey: true, //主键
     },
-    username: {
+    roleIds: {
       type: DataTypes.STRING,
+      comment: "角色ids",
+    },
+    deptId: {
+      type: DataTypes.STRING,
+      comment: "部门id",
+    },
+    username: {
+      type: DataTypes.STRING(20),
+      comment: "账号",
     },
     password: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(20),
+      comment: "密码",
     },
     avatar: {
       type: DataTypes.STRING,
-    },
-    birthday: {
-      type: DataTypes.STRING,
-    },
-    homeBg: {
-      type: DataTypes.STRING,
+      comment: "头像",
     },
     status: {
       type: DataTypes.INTEGER,
       defaultValue: 1,
+      comment: "开启状态",
     },
   },
-  {
-    timestamps: false, // 不要默认时间戳
-    // Freeze Table Name
-    freezeTableName: true,
-  },
+  {},
 );
 
 // Export model Product

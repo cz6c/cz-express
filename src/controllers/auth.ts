@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
-import UserModel from "../models/users";
+import UserModel from "../models/user";
+import MenuModel from "../models/menu";
 import { ConstantEnum } from "../utils/constant";
 import { resultSuccess } from "../utils/result";
+import { arr2Tree } from "../utils/tree";
 
 export default class AuthController {
   /**
@@ -37,6 +39,29 @@ export default class AuthController {
       );
     } else {
       next(new Error("密码错误"));
+    }
+  }
+
+  /**
+   * @description: 获取菜单路由
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @return {*}
+   */
+  public static async getMenuList(req: Request, res: Response, next: NextFunction): Promise<any> {
+    // 查询参数处理
+    let params: any = { status: 1 };
+    try {
+      const total = await MenuModel.count({ where: params });
+      let list = await MenuModel.findAll({
+        where: params,
+      });
+      list = arr2Tree(JSON.parse(JSON.stringify(list)));
+      res.json(resultSuccess({ list, total }));
+    } catch (err: any) {
+      console.log(err);
+      next(new Error(err));
     }
   }
 }
