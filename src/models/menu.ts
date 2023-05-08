@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import db from "../db";
 
 // Define schema
-const MenuModel = db.define(
+const menuModel = db.define(
   "menu",
   {
     id: {
@@ -56,4 +56,4 @@ const MenuModel = db.define(
 );
 
 // Export model Product
-export default MenuModel;
+export default menuModel;

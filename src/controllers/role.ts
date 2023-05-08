@@ -1,12 +1,18 @@
 import { Request, Response, NextFunction } from "express";
 import { resultSuccess, resultPageSuccess } from "../utils/result";
-import RoleModel from "../models/role";
+import roleModel from "../models/role";
 import { Op } from "sequelize";
+import { validationResult } from "express-validator";
 
-export default class RoleController {
+export default class roleController {
   public static async info(req: Request, res: Response, next: NextFunction) {
     try {
-      const item = await RoleModel.findAll({
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        next(new Error(errors.array()[0]?.msg));
+        return;
+      }
+      const item = await roleModel.findAll({
         where: {
           id: req.query.id,
         },
@@ -24,7 +30,7 @@ export default class RoleController {
 
   public static async list(req: Request, res: Response, next: NextFunction) {
     // 查询参数处理
-    let params: any = { status: 1 };
+    let params: any = { isDel: 1 };
     const keyword = req.query.keyword;
     if (keyword) {
       params.roleName = {
@@ -32,8 +38,8 @@ export default class RoleController {
       };
     }
     try {
-      const total = await RoleModel.count({ where: params });
-      const list = await RoleModel.findAll({
+      const total = await roleModel.count({ where: params });
+      const list = await roleModel.findAll({
         where: params,
       });
       // 分页参数处理
@@ -52,7 +58,12 @@ export default class RoleController {
 
   public static async create(req: Request, res: Response, next: NextFunction) {
     try {
-      await RoleModel.create(req.body);
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        next(new Error(errors.array()[0]?.msg));
+        return;
+      }
+      await roleModel.create(req.body);
       res.json(resultSuccess(null));
     } catch (err: any) {
       console.log(err);
@@ -62,10 +73,36 @@ export default class RoleController {
 
   public static async update(req: Request, res: Response, next: NextFunction) {
     try {
-      await RoleModel.update(req.body, {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        next(new Error(errors.array()[0]?.msg));
+        return;
+      }
+      await roleModel.update(req.body, {
         where: {
           id: req.body.id,
         },
+        fields: ["roleName", "menuIds", "remark"],
+      });
+      res.json(resultSuccess(null));
+    } catch (err: any) {
+      console.log(err);
+      next(new Error(err));
+    }
+  }
+
+  public static async status(req: Request, res: Response, next: NextFunction) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        next(new Error(errors.array()[0]?.msg));
+        return;
+      }
+      await roleModel.update(req.body, {
+        where: {
+          id: req.body.id,
+        },
+        fields: ["status"],
       });
       res.json(resultSuccess(null));
     } catch (err: any) {
@@ -76,12 +113,18 @@ export default class RoleController {
 
   public static async destroy(req: Request, res: Response, next: NextFunction) {
     try {
-      await RoleModel.update(
-        { status: 2 },
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        next(new Error(errors.array()[0]?.msg));
+        return;
+      }
+      await roleModel.update(
+        { isDel: 0 },
         {
           where: {
             id: req.body.id,
           },
+          fields: ["isDel"],
         },
       );
       res.json(resultSuccess(null));

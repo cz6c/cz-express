@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
-import UserModel from "../models/user";
-import MenuModel from "../models/menu";
+import userModel from "../models/user";
+import menuModel from "../models/menu";
 import { ConstantEnum } from "../utils/constant";
 import { resultSuccess } from "../utils/result";
 import { arr2Tree } from "../utils/tree";
@@ -18,10 +18,10 @@ export default class AuthController {
   public static async login(req: Request, res: Response, next: NextFunction) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      next(new Error(errors.array()[0]?.msg));
     }
     const { username, password } = req.body;
-    const item: any = await UserModel.findAll({
+    const item: any = await userModel.findAll({
       where: {
         username: username,
       },
@@ -53,8 +53,8 @@ export default class AuthController {
     // 查询参数处理
     let params: any = { status: 1 };
     try {
-      const total = await MenuModel.count({ where: params });
-      let list = await MenuModel.findAll({
+      const total = await menuModel.count({ where: params });
+      let list = await menuModel.findAll({
         where: params,
       });
       list = arr2Tree(JSON.parse(JSON.stringify(list)));

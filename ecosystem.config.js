@@ -44,45 +44,45 @@ module.exports = {
   ],
 
   // 环境部署
-  deploy: {
-    // 生成环境
-    // 1、上传代码到云端仓库
-    // 2、部署命令预览：
-    // 首次部署: $ pm2 deploy ecosystem.json production setup
-    // 更新版本: $ pm2 deploy ecosystem.json production update
-    // 返回上一个版本: $ pm2 deploy ecosystem.json production revert 1
-    // 3、执行首次部署：$ pm2 deploy ecosystem.json production setup
-    // 4、执行部署运行：$ pm2 deploy ecosystem.json production
-    // 5、看到 success 成功，报错看错误自行百度
-    production: {
-      // ssh的用户名，登录远程服务器的用户名
-      user: "dzm",
-      // 要发布的机器，远程服务器的IP或hostname，此处可以是数组同步部署多个服务器
-      host: "10.0.90.164",
-      // 要发布的代码分支，远端名称及分支名
-      ref: "origin/master",
-      // 代码Git仓库地址
-      repo: "git@gitlab.dzm.net:dzm/nuxt-test",
-      // 服务器存储代码地址，远程服务器部署目录
-      path: "/usr/local/var/www/production",
-      // ssh权限配置
-      ssh_options: ["StrictHostKeyChecking=no", "PasswordAuthentication=no"],
-      // 1、在 setup 前触发，如安装 git
-      "pre-setup": "",
-      // 2、在 setup 后触发，如做一些其他配置
-      "post-setup": "",
-      // 3、在 deploy 前触发，执行本地脚本
-      "pre-deploy-local": "",
-      // 4、在 deploy 前触发，执行远程脚本
-      "pre-deploy": "git fetch --all",
-      // 5、在 deploy 后触发，执行远程脚本，如 npm install，部署后需要执行的命令
-      "post-deploy":
-        "npm install && pm2 reload ecosystem.config.js --env production",
-      // 环境变量
-      env: {
-        // 指定为生成环境
-        NODE_ENV: "production",
-      },
-    },
-  },
+  // deploy: {
+  //   // 生成环境
+  //   // 1、上传代码到云端仓库
+  //   // 2、部署命令预览：
+  //   // 首次部署: $ pm2 deploy ecosystem.json production setup
+  //   // 更新版本: $ pm2 deploy ecosystem.json production update
+  //   // 返回上一个版本: $ pm2 deploy ecosystem.json production revert 1
+  //   // 3、执行首次部署：$ pm2 deploy ecosystem.json production setup
+  //   // 4、执行部署运行：$ pm2 deploy ecosystem.json production
+  //   // 5、看到 success 成功，报错看错误自行百度
+  //   production: {
+  //     // ssh的用户名，登录远程服务器的用户名
+  //     user: "dzm",
+  //     // 要发布的机器，远程服务器的IP或hostname，此处可以是数组同步部署多个服务器
+  //     host: "10.0.90.164",
+  //     // 要发布的代码分支，远端名称及分支名
+  //     ref: "origin/master",
+  //     // 代码Git仓库地址
+  //     repo: "git@gitlab.dzm.net:dzm/nuxt-test",
+  //     // 服务器存储代码地址，远程服务器部署目录
+  //     path: "/usr/local/var/www/production",
+  //     // ssh权限配置
+  //     ssh_options: ["StrictHostKeyChecking=no", "PasswordAuthentication=no"],
+  //     // 1、在 setup 前触发，如安装 git
+  //     "pre-setup": "",
+  //     // 2、在 setup 后触发，如做一些其他配置
+  //     "post-setup": "",
+  //     // 3、在 deploy 前触发，执行本地脚本
+  //     "pre-deploy-local": "",
+  //     // 4、在 deploy 前触发，执行远程脚本
+  //     "pre-deploy": "git fetch --all",
+  //     // 5、在 deploy 后触发，执行远程脚本，如 npm install，部署后需要执行的命令
+  //     "post-deploy":
+  //       "npm install && pm2 reload ecosystem.config.js --env production",
+  //     // 环境变量
+  //     env: {
+  //       // 指定为生成环境
+  //       NODE_ENV: "production",
+  //     },
+  //   },
+  // },
 };

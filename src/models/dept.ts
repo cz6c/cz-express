@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import db from "../db";
 
 // Define schema
-const DeptModel = db.define(
+const deptModel = db.define(
   "dept",
   {
     id: {
@@ -26,9 +26,25 @@ const DeptModel = db.define(
       defaultValue: 1,
       comment: "开启状态",
     },
+    isDel: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1,
+      comment: "是否删除",
+    },
   },
   {},
 );
 
+// deptModel
+//   .sync({
+//     force: true,
+//   })
+//   .then(() => {
+//     console.log("deptModel强制同步-先删表再重新建表");
+//   })
+//   .catch(err => {
+//     console.error("同步失败", err);
+//   });
+
 // Export model Product
-export default DeptModel;
+export default deptModel;

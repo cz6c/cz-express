@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import db from "../db";
 
 // Define schema
-const RoleModel = db.define(
+const roleModel = db.define(
   "role",
   {
     id: {
@@ -27,9 +27,25 @@ const RoleModel = db.define(
       defaultValue: 1,
       comment: "开启状态",
     },
+    isDel: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1,
+      comment: "是否删除",
+    },
   },
   {},
 );
 
+// roleModel
+//   .sync({
+//     force: true,
+//   })
+//   .then(() => {
+//     console.log("roleModel强制同步-先删表再重新建表");
+//   })
+//   .catch(err => {
+//     console.error("同步失败", err);
+//   });
+
 // Export model Product
-export default RoleModel;
+export default roleModel;
