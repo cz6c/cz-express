@@ -5,7 +5,6 @@ import { getToken, resultError } from "../utils/result";
 import multerRouter from "./modules/multer";
 import authRouter from "./modules/auth";
 import userRouter from "./modules/user";
-import deptRouter from "./modules/dept";
 import roleRouter from "./modules/role";
 
 const router = express.Router();
@@ -27,7 +26,6 @@ router.use(
 router.use("/admin", authRouter);
 router.use("/admin", userRouter);
 router.use("/admin", multerRouter);
-router.use("/admin", deptRouter);
 router.use("/admin", roleRouter);
 
 // 自定义统一异常处理中间件

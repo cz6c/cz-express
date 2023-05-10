@@ -57,7 +57,24 @@ export default class AuthController {
       let list = await menuModel.findAll({
         where: params,
       });
-      list = arr2Tree(JSON.parse(JSON.stringify(list)));
+      let arr: any = JSON.parse(JSON.stringify(list));
+      arr = arr.map((c: any) => {
+        const item = {
+          ...c,
+          meta: {
+            title: c.title,
+            icon: c.icon,
+            hideMenu: c.hideMenu,
+            activeMenu: c.activeMenu,
+          },
+        };
+        delete item.title;
+        delete item.icon;
+        delete item.hideMenu;
+        delete item.activeMenu;
+        return item;
+      });
+      list = arr2Tree(arr);
       res.json(resultSuccess({ list, total }));
     } catch (err: any) {
       console.log(err);
