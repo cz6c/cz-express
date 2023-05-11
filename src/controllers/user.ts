@@ -28,7 +28,7 @@ export default class userController {
 
   public static async list(req: Request, res: Response, next: NextFunction) {
     // 查询参数处理
-    let params: any = { isDel: 1 };
+    let params: any = { notDel: 1 };
     const username = req.query.username;
     if (username) {
       params.username = {
@@ -120,12 +120,12 @@ export default class userController {
         return;
       }
       await userModel.update(
-        { isDel: 0 },
+        { notDel: 0 },
         {
           where: {
             id: req.body.id,
           },
-          fields: ["isDel"],
+          fields: ["notDel"],
         },
       );
       res.json(resultSuccess(null));

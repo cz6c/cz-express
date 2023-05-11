@@ -5,7 +5,7 @@ import userModel from "../models/user";
 import menuModel from "../models/menu";
 import { ConstantEnum } from "../utils/constant";
 import { resultSuccess } from "../utils/result";
-import { arr2Tree } from "../utils/tree";
+import { listToTree } from "../utils/tree";
 
 export default class AuthController {
   /**
@@ -74,7 +74,7 @@ export default class AuthController {
         delete item.activeMenu;
         return item;
       });
-      list = arr2Tree(arr);
+      list = listToTree(arr);
       res.json(resultSuccess({ list, total }));
     } catch (err: any) {
       console.log(err);

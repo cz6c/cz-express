@@ -22,12 +22,11 @@ app.use(routes);
 // 数据库连接成功处理
 db.authenticate()
   .then(() => {
-    // const isForce = false;
     // db.sync({
-    //   force: isForce,
+    //   force: true,
     // })
     //   .then(() => {
-    //     console.log(isForce ? "强制同步-先删表再重新建表" : "同步-尚未在数据库中的模型");
+    //     console.log("强制同步-先删表再重新建表");
     //   })
     //   .catch(err => {
     //     console.error("同步失败", err);

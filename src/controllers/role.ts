@@ -30,11 +30,11 @@ export default class roleController {
 
   public static async list(req: Request, res: Response, next: NextFunction) {
     // 查询参数处理
-    let params: any = { isDel: 1 };
-    const keyword = req.query.keyword;
-    if (keyword) {
+    let params: any = { notDel: 1 };
+    const roleName = req.query.roleName;
+    if (roleName) {
       params.roleName = {
-        [Op.like]: `%${keyword}%`,
+        [Op.like]: `%${roleName}%`,
       };
     }
     try {
@@ -119,12 +119,12 @@ export default class roleController {
         return;
       }
       await roleModel.update(
-        { isDel: 0 },
+        { notDel: 0 },
         {
           where: {
             id: req.body.id,
           },
-          fields: ["isDel"],
+          fields: ["notDel"],
         },
       );
       res.json(resultSuccess(null));

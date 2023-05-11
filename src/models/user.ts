@@ -12,33 +12,49 @@ const userModel = db.define(
     },
     roleId: {
       type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+      defaultValue: "",
       comment: "角色id",
-    },
-    deptId: {
-      type: DataTypes.STRING,
-      comment: "部门id",
     },
     username: {
       type: DataTypes.STRING(20),
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+      defaultValue: "",
       comment: "账号",
     },
     password: {
       type: DataTypes.STRING(20),
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+      defaultValue: "",
       comment: "密码",
     },
     avatar: {
       type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+      defaultValue: "",
       comment: "头像",
     },
     status: {
       type: DataTypes.INTEGER,
       defaultValue: 1,
-      comment: "开启状态",
+      comment: "开启状态  1开启 0关闭",
     },
-    isDel: {
+    notDel: {
       type: DataTypes.INTEGER,
       defaultValue: 1,
-      comment: "是否删除",
+      comment: "是否删除  1未删除 0删除",
     },
   },
   {},
