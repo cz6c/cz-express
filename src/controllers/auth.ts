@@ -5,6 +5,7 @@ import userModel from "../models/user";
 import menuModel from "../models/menu";
 import { ConstantEnum } from "../utils/constant";
 import { resultSuccess } from "../utils/result";
+import { listToTree } from "../utils/tree";
 
 export default class AuthController {
   /**
@@ -53,9 +54,27 @@ export default class AuthController {
     let params: any = { status: 1 };
     try {
       const total = await menuModel.count({ where: params });
-      const list = await menuModel.findAll({
+      let list = await menuModel.findAll({
         where: params,
       });
+      let arr: any = JSON.parse(JSON.stringify(list));
+      arr = arr.map((c: any) => {
+        const item = {
+          ...c,
+          meta: {
+            title: c.title,
+            icon: c.icon,
+            hideMenu: c.hideMenu,
+            activeMenu: c.activeMenu,
+          },
+        };
+        delete item.title;
+        delete item.icon;
+        delete item.hideMenu;
+        delete item.activeMenu;
+        return item;
+      });
+      list = listToTree(arr);
       res.json(resultSuccess({ list, total }));
     } catch (err: any) {
       console.log(err);
