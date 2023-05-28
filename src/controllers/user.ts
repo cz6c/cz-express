@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { getToken, encode, resultSuccess, resultPageSuccess } from "../utils/result";
+import { getToken, encode, resultSuccess } from "../utils/result";
 import userModel from "../models/user";
 import { Op } from "sequelize";
 import { validationResult } from "express-validator";
@@ -28,7 +28,7 @@ export default class userController {
 
   public static async list(req: Request, res: Response, next: NextFunction) {
     // 查询参数处理
-    let params: any = { notDel: 1 };
+    let params: Record<string, any> = { notDel: 1 };
     const username = req.query.username;
     if (username) {
       params.username = {
@@ -36,19 +36,21 @@ export default class userController {
       };
     }
     try {
-      const total = await userModel.count({ where: params });
-      const list = await userModel.findAll({
-        attributes: { exclude: ["password"] }, //过滤掉password字段
-        where: params,
-      });
       // 分页参数处理
       const limit = Number(req.query.limit);
       const page = Number(req.query.page);
-      if (limit && page) {
-        res.json(resultPageSuccess({ list, page, limit, total }));
-      } else {
-        res.json(resultSuccess({ list, total }));
+      const isToPages = limit && page;
+      let pageParams = {};
+      if (isToPages) {
+        const offset = (page - 1) * limit;
+        pageParams = { offset, limit };
       }
+      const { rows: list, count: total } = await userModel.findAndCountAll({
+        where: params,
+        attributes: { exclude: ["password"] }, //过滤掉password字段
+        ...pageParams,
+      });
+      res.json(resultSuccess(isToPages ? { list, page, limit, total } : { list, total }));
     } catch (err: any) {
       console.log(err);
       next(new Error(err));

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { resultSuccess, resultPageSuccess } from "../utils/result";
+import { resultSuccess } from "../utils/result";
 import roleModel from "../models/role";
 import { Op } from "sequelize";
 import { validationResult } from "express-validator";
@@ -30,7 +30,7 @@ export default class roleController {
 
   public static async list(req: Request, res: Response, next: NextFunction) {
     // 查询参数处理
-    let params: any = { notDel: 1 };
+    let params: Record<string, any> = { notDel: 1 };
     const roleName = req.query.roleName;
     if (roleName) {
       params.roleName = {
@@ -38,18 +38,20 @@ export default class roleController {
       };
     }
     try {
-      const total = await roleModel.count({ where: params });
-      const list = await roleModel.findAll({
-        where: params,
-      });
       // 分页参数处理
       const limit = Number(req.query.limit);
       const page = Number(req.query.page);
-      if (limit && page) {
-        res.json(resultPageSuccess({ list, page, limit, total }));
-      } else {
-        res.json(resultSuccess({ list, total }));
+      const isToPages = limit && page;
+      let pageParams = {};
+      if (isToPages) {
+        const offset = (page - 1) * limit;
+        pageParams = { offset, limit };
       }
+      const { rows: list, count: total } = await roleModel.findAndCountAll({
+        where: params,
+        ...pageParams,
+      });
+      res.json(resultSuccess(isToPages ? { list, page, limit, total } : { list, total }));
     } catch (err: any) {
       console.log(err);
       next(new Error(err));

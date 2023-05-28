@@ -39,35 +39,6 @@ export function resultError(
 }
 
 /**
- * @description: 处理列表分页
- * @param {number} page
- * @param {number} limit
- * @param {T} list
- * @return {*}
- */
-export function resultPageSuccess<T>(
-  { list, page, limit, total }: { list: T[]; page: number; limit: number; total: number },
-  { code = ConstantEnum.CODE_SUCCESS as number, message = "Request Success" } = {},
-): RequestInfo<unknown> {
-  const offset = (page - 1) * Number(limit);
-  const pageData =
-    offset + Number(limit) >= list.length
-      ? list.slice(offset, list.length)
-      : list.slice(offset, offset + Number(limit));
-  return {
-    ...resultSuccess(
-      {
-        list: pageData,
-        page,
-        limit,
-        total,
-      },
-      { code, message },
-    ),
-  };
-}
-
-/**
  * @description: 获取token
  * @param {Request} req
  * @return {*}
