@@ -2,20 +2,32 @@ import express, { Request, Response, NextFunction } from "express";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import moment from "moment";
 import { resultSuccess } from "../../utils/result";
 
 const router = express.Router();
 
 // 上传文件存放根目录
-const uploadDir = path.join(__dirname, `../../public/upload`);
-// 获取当前年份存放路径
-const year = moment().format("YYYY");
-const dir = `${uploadDir}/${year}`;
+const uploadDir = path.join(__dirname, `../public/upload`);
+let fileDir = "";
 
 const storage = multer.diskStorage({
   // 文件保存目录
   destination: function (req, file, cb) {
+    console.log(req.body);
+    // 根据接口参数决定存储目录  append额外的参数必须在append文件之前，不然读不到
+    switch (req.body.fileType) {
+      case "1":
+        fileDir = "avatar";
+        break;
+      case "2":
+        fileDir = "homeImg";
+        break;
+      default:
+        fileDir = "default";
+        break;
+    }
+    console.log(fileDir);
+    const dir = `${uploadDir}/${fileDir}`;
     // 检查当前路径文件夹是否存在如果不存在则新建文件夹
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
@@ -32,9 +44,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post("/upload", upload.single("file"), (req: Request, res: Response, next: NextFunction) => {
-  res.json(resultSuccess(`/upload/${year}/${req.file.filename}`));
+  console.log(req.body);
+  res.json(resultSuccess(`/upload/${fileDir}/${req.file.filename}`));
   // req.file 是 `file` 文件的信息
-  // req.body 将具有文本域数据，如果存在的话
 });
 
 export default router;
