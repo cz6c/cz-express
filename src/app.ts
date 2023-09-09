@@ -22,15 +22,17 @@ app.use(routes);
 // 数据库连接成功处理
 db.authenticate()
   .then(() => {
-    // db.sync({
-    //   force: true,
-    // })
-    //   .then(() => {
-    //     console.log("强制同步-先删表再重新建表");
-    //   })
-    //   .catch(err => {
-    //     console.error("同步失败", err);
-    //   });
+    console.log("连接成功");
+    db.sync({
+      alter: true,
+      force: false,
+    })
+      .then(() => {
+        console.log("同步表");
+      })
+      .catch(err => {
+        console.error("同步失败", err);
+      });
   })
   .catch(err => {
     console.error("连接失败", err);

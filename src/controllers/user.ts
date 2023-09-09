@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { getToken, encode, resultSuccess } from "../utils/result";
-import userModel from "../models/user";
+import { UserModel } from "../models";
 import { Op } from "sequelize";
 import { validationResult } from "express-validator";
 
@@ -9,7 +9,7 @@ export default class userController {
     const token = getToken(req);
     const jwtPayload = encode(token);
     try {
-      const item = await userModel.findAll({
+      const item = await UserModel.findAll({
         attributes: { exclude: ["password"] }, //过滤掉password字段
         where: {
           id: jwtPayload.id,
@@ -45,7 +45,7 @@ export default class userController {
         const offset = (page - 1) * limit;
         pageParams = { offset, limit };
       }
-      const { rows: list, count: total } = await userModel.findAndCountAll({
+      const { rows: list, count: total } = await UserModel.findAndCountAll({
         where: params,
         attributes: { exclude: ["password"] }, //过滤掉password字段
         ...pageParams,
@@ -64,7 +64,7 @@ export default class userController {
         next(new Error(errors.array()[0]?.msg));
         return;
       }
-      await userModel.create(req.body);
+      await UserModel.create(req.body);
       res.json(resultSuccess(null));
     } catch (err: any) {
       console.log(err);
@@ -81,7 +81,7 @@ export default class userController {
       }
       const token = getToken(req);
       const jwtPayload = encode(token);
-      await userModel.update(req.body, {
+      await UserModel.update(req.body, {
         where: {
           id: jwtPayload.id,
         },
@@ -101,7 +101,7 @@ export default class userController {
         next(new Error(errors.array()[0]?.msg));
         return;
       }
-      await userModel.update(req.body, {
+      await UserModel.update(req.body, {
         where: {
           id: req.body.id,
         },
@@ -121,7 +121,7 @@ export default class userController {
         next(new Error(errors.array()[0]?.msg));
         return;
       }
-      await userModel.update(
+      await UserModel.update(
         { notDel: 0 },
         {
           where: {

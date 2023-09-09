@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
-import userModel from "../models/user";
-import menuModel from "../models/menu";
+import { UserModel, MenuModel } from "../models";
 import { ConstantEnum } from "../utils/constant";
 import { resultSuccess } from "../utils/result";
 import { listToTree } from "../utils/tree";
@@ -21,7 +20,7 @@ export default class AuthController {
       next(new Error(errors.array()[0]?.msg));
     }
     const { username, password } = req.body;
-    const item: any = await userModel.findAll({
+    const item: any = await UserModel.findAll({
       where: {
         username: username,
       },
@@ -53,8 +52,8 @@ export default class AuthController {
     // 查询参数处理
     let params: any = { status: 1 };
     try {
-      const total = await menuModel.count({ where: params });
-      let list = await menuModel.findAll({
+      const total = await MenuModel.count({ where: params });
+      let list = await MenuModel.findAll({
         where: params,
       });
       let arr: any = JSON.parse(JSON.stringify(list));

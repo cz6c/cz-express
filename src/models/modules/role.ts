@@ -1,50 +1,41 @@
 import { DataTypes } from "sequelize";
-import db from "../db";
+import db from "../../db";
 
 // Define schema
-const userModel = db.define(
-  "user",
+const RoleModel = db.define(
+  "role",
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER(),
       autoIncrement: true, //整数自增
       primaryKey: true, //主键
     },
-    roleId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-      defaultValue: "",
-      comment: "角色id",
-    },
-    username: {
+    roleName: {
       type: DataTypes.STRING(20),
       allowNull: false,
       validate: {
         notEmpty: true,
       },
       defaultValue: "",
-      comment: "账号",
+      comment: "角色名称",
     },
-    password: {
-      type: DataTypes.STRING(20),
+    remark: {
+      type: DataTypes.STRING(50),
       allowNull: false,
       validate: {
         notEmpty: true,
       },
       defaultValue: "",
-      comment: "密码",
+      comment: "备注",
     },
-    avatar: {
+    menuIds: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
       defaultValue: "",
-      comment: "头像",
+      comment: "菜单id数组",
     },
     status: {
       type: DataTypes.INTEGER,
@@ -60,16 +51,5 @@ const userModel = db.define(
   {},
 );
 
-// userModel
-//   .sync({
-//     force: true,
-//   })
-//   .then(() => {
-//     console.log("userModel强制同步-先删表再重新建表");
-//   })
-//   .catch(err => {
-//     console.error("同步失败", err);
-//   });
-
 // Export model Product
-export default userModel;
+export default RoleModel;

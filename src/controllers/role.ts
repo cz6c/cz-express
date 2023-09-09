@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { resultSuccess } from "../utils/result";
-import roleModel from "../models/role";
+import { RoleModel } from "../models";
 import { Op } from "sequelize";
 import { validationResult } from "express-validator";
 
@@ -12,7 +12,7 @@ export default class roleController {
         next(new Error(errors.array()[0]?.msg));
         return;
       }
-      const item = await roleModel.findAll({
+      const item = await RoleModel.findAll({
         where: {
           id: req.query.id,
         },
@@ -47,7 +47,7 @@ export default class roleController {
         const offset = (page - 1) * limit;
         pageParams = { offset, limit };
       }
-      const { rows: list, count: total } = await roleModel.findAndCountAll({
+      const { rows: list, count: total } = await RoleModel.findAndCountAll({
         where: params,
         ...pageParams,
       });
@@ -65,7 +65,7 @@ export default class roleController {
         next(new Error(errors.array()[0]?.msg));
         return;
       }
-      await roleModel.create(req.body);
+      await RoleModel.create(req.body);
       res.json(resultSuccess(null));
     } catch (err: any) {
       console.log(err);
@@ -80,7 +80,7 @@ export default class roleController {
         next(new Error(errors.array()[0]?.msg));
         return;
       }
-      await roleModel.update(req.body, {
+      await RoleModel.update(req.body, {
         where: {
           id: req.body.id,
         },
@@ -100,7 +100,7 @@ export default class roleController {
         next(new Error(errors.array()[0]?.msg));
         return;
       }
-      await roleModel.update(req.body, {
+      await RoleModel.update(req.body, {
         where: {
           id: req.body.id,
         },
@@ -120,7 +120,7 @@ export default class roleController {
         next(new Error(errors.array()[0]?.msg));
         return;
       }
-      await roleModel.update(
+      await RoleModel.update(
         { notDel: 0 },
         {
           where: {

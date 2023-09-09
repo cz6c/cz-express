@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
-import db from "../db";
+import db from "../../db";
 
 // Define schema
-const menuModel = db.define(
+const MenuModel = db.define(
   "menu",
   {
     id: {
@@ -88,16 +88,5 @@ const menuModel = db.define(
   },
 );
 
-// menuModel
-//   .sync({
-//     force: true,
-//   })
-//   .then(() => {
-//     console.log("userModel强制同步-先删表再重新建表");
-//   })
-//   .catch(err => {
-//     console.error("同步失败", err);
-//   });
-
 // Export model Product
-export default menuModel;
+export default MenuModel;
